@@ -1,0 +1,11 @@
+.comment-cart-container{
+    border: 1px solid black;
+    padding: 10px;
+    margin: 20px;  
+
+    
+}
+
+.comment-cart-container:hover{
+    background-color: aqua;
+}

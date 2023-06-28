@@ -1,0 +1,9 @@
+.pagination-container a{
+    color: rgb(2, 97, 240);
+}
+
+.pagination-container li{
+    display: inline;
+    padding: 10px;
+    
+}
