@@ -24,9 +24,11 @@ const Posts = () => {
     const firstDataIndex = lastDataIndex - dataPerPage
 
     var currentData = filteredPost.slice(firstDataIndex, lastDataIndex)
-   
 
-    const onPageChange= (num)=> setCurrentPage(num) 
+
+    const onPageChange = (num) => setCurrentPage(num)
+    const onPrevPage = () => setCurrentPage(currentPage - 1)
+    const onNextPage = () => setCurrentPage(currentPage + 1)
 
 
     const onSearchChange = (event) => {
@@ -54,9 +56,9 @@ const Posts = () => {
             const postsData = await fetch("https://jsonplaceholder.typicode.com/posts")
 
             const posts = await postsData.json()
-            
+
             const filteredPosts = posts.filter((post) => { return post.userId == userId })
-          
+
             setPosts(filteredPosts)
             setFilteredPost(filteredPosts)
 
@@ -73,11 +75,19 @@ const Posts = () => {
     return (
         <div>
             <SearchBox onChangeHandler={onSearchChange} />
-            {   currentData.length!= 0 ?
-                currentData.map((post) => <PostCart post={post} />)
-                : "NOT FOUND!!"
+            {
+                currentData.length != 0 ?
+                    currentData.map((post) => <PostCart post={post} />)
+                    : "NOT FOUND!!"
             }
-             <Pagination  dataPerPage={dataPerPage} totalData={filteredPost.length} onPageChangeHandler={onPageChange} />
+
+            {
+                currentPage != 1 ? <p className='prev' onClick={onPrevPage}>Prev</p> : ""
+            }
+            <Pagination dataPerPage={dataPerPage} totalData={filteredPost.length} onPageChangeHandler={onPageChange} />
+            {
+                currentPage != Math.ceil(filteredPost.length / dataPerPage) ? <p className='prev' onClick={onNextPage}>Next</p> : ""
+            }
         </div>
     )
 }

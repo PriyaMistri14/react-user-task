@@ -29,9 +29,11 @@ const Comments = () => {
     const firstDataIndex = lastDataIndex - dataPerPage
 
     var currentData = filteredComments.slice(firstDataIndex, lastDataIndex)
-   
 
-    const onPageChange= (num)=> setCurrentPage(num) 
+
+    const onPageChange = (num) => setCurrentPage(num)
+    const onPrevPage = () => setCurrentPage(currentPage - 1)
+    const onNextPage = () => setCurrentPage(currentPage + 1)
 
 
 
@@ -45,7 +47,7 @@ const Comments = () => {
         })
         setFilteredComments(newComments)
         setCurrentPage(1)
-      
+
 
     }
 
@@ -56,14 +58,14 @@ const Comments = () => {
 
     useEffect(() => {
 
-        const fetchComment = async () => {           
+        const fetchComment = async () => {
 
             const commentsData = await fetch('https://jsonplaceholder.typicode.com/comments')
 
-            const comments = await commentsData.json()          
+            const comments = await commentsData.json()
 
             const filteredComments = comments.filter((comment) => { return comment.postId == postId })
-            
+
             setComments(filteredComments)
             setFilteredComments(filteredComments)
 
@@ -75,14 +77,22 @@ const Comments = () => {
 
 
     return (
-    <div>
-         <SearchBox onChangeHandler={onSearchChange} />
-        {   currentData.length != 0 ? 
-            currentData.map((comment) => <CommentCart comment={comment} />)
-            : "NOT FOUND!!"
-        }
-         <Pagination  dataPerPage={dataPerPage} totalData={filteredComments.length} onPageChangeHandler={onPageChange} />
-    </div>
+        <div>
+            <SearchBox onChangeHandler={onSearchChange} />
+            {currentData.length != 0 ?
+                currentData.map((comment) => <CommentCart comment={comment} />)
+                : "NOT FOUND!!"
+            }
+
+            {
+                currentPage != 1 ? <p className='prev' onClick={onPrevPage}>Prev</p> : ""
+            }
+            <Pagination dataPerPage={dataPerPage} totalData={filteredComments.length} onPageChangeHandler={onPageChange} />
+            {
+                currentPage != Math.ceil(filteredComments.length / dataPerPage) ? <p className='prev' onClick={onNextPage}>Next</p> : ""
+            }
+
+        </div>
     )
 }
 
